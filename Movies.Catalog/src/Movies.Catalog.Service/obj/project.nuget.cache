@@ -1,0 +1,15 @@
+{
+  "version": 2,
+  "dgSpecHash": "FuiH2KZc80d8ST0vPxsNTzgg+vKN2DoLCpxZQurpQ3kgHCrlWWK8KZwXfu+ZdXsMZe61TU6UaExpiNX7u5wjvg==",
+  "success": true,
+  "projectFilePath": "/Users/camerongrondines/Desktop/Portfolio/MoviesDatabase/Movies.Catalog/src/Movies.Catalog.Service/Movies.Catalog.Service.csproj",
+  "expectedPackageFiles": [
+    "/Users/camerongrondines/.nuget/packages/microsoft.extensions.apidescription.server/3.0.0/microsoft.extensions.apidescription.server.3.0.0.nupkg.sha512",
+    "/Users/camerongrondines/.nuget/packages/microsoft.openapi/1.2.3/microsoft.openapi.1.2.3.nupkg.sha512",
+    "/Users/camerongrondines/.nuget/packages/swashbuckle.aspnetcore/5.6.3/swashbuckle.aspnetcore.5.6.3.nupkg.sha512",
+    "/Users/camerongrondines/.nuget/packages/swashbuckle.aspnetcore.swagger/5.6.3/swashbuckle.aspnetcore.swagger.5.6.3.nupkg.sha512",
+    "/Users/camerongrondines/.nuget/packages/swashbuckle.aspnetcore.swaggergen/5.6.3/swashbuckle.aspnetcore.swaggergen.5.6.3.nupkg.sha512",
+    "/Users/camerongrondines/.nuget/packages/swashbuckle.aspnetcore.swaggerui/5.6.3/swashbuckle.aspnetcore.swaggerui.5.6.3.nupkg.sha512"
+  ],
+  "logs": []
+}
