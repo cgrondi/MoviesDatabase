@@ -26,3 +26,15 @@
 /Users/camerongrondines/Desktop/Portfolio/MoviesDatabase/Movies.Catalog/src/Movies.Catalog.Service/obj/Debug/net5.0/ref/Movies.Catalog.Service.dll
 /Users/camerongrondines/Desktop/Portfolio/MoviesDatabase/Movies.Catalog/src/Movies.Catalog.Service/obj/Debug/net5.0/Movies.Catalog.Service.pdb
 /Users/camerongrondines/Desktop/Portfolio/MoviesDatabase/Movies.Catalog/src/Movies.Catalog.Service/obj/Debug/net5.0/Movies.Catalog.Service.genruntimeconfig.cache
+/Users/camerongrondines/Desktop/Portfolio/MoviesDatabase/Movies.Catalog/src/Movies.Catalog.Service/bin/Debug/net5.0/DnsClient.dll
+/Users/camerongrondines/Desktop/Portfolio/MoviesDatabase/Movies.Catalog/src/Movies.Catalog.Service/bin/Debug/net5.0/MongoDB.Bson.dll
+/Users/camerongrondines/Desktop/Portfolio/MoviesDatabase/Movies.Catalog/src/Movies.Catalog.Service/bin/Debug/net5.0/MongoDB.Driver.dll
+/Users/camerongrondines/Desktop/Portfolio/MoviesDatabase/Movies.Catalog/src/Movies.Catalog.Service/bin/Debug/net5.0/MongoDB.Driver.Core.dll
+/Users/camerongrondines/Desktop/Portfolio/MoviesDatabase/Movies.Catalog/src/Movies.Catalog.Service/bin/Debug/net5.0/MongoDB.Libmongocrypt.dll
+/Users/camerongrondines/Desktop/Portfolio/MoviesDatabase/Movies.Catalog/src/Movies.Catalog.Service/bin/Debug/net5.0/SharpCompress.dll
+/Users/camerongrondines/Desktop/Portfolio/MoviesDatabase/Movies.Catalog/src/Movies.Catalog.Service/bin/Debug/net5.0/runtimes/win/native/libzstd.dll
+/Users/camerongrondines/Desktop/Portfolio/MoviesDatabase/Movies.Catalog/src/Movies.Catalog.Service/bin/Debug/net5.0/runtimes/win/native/snappy32.dll
+/Users/camerongrondines/Desktop/Portfolio/MoviesDatabase/Movies.Catalog/src/Movies.Catalog.Service/bin/Debug/net5.0/runtimes/win/native/snappy64.dll
+/Users/camerongrondines/Desktop/Portfolio/MoviesDatabase/Movies.Catalog/src/Movies.Catalog.Service/bin/Debug/net5.0/runtimes/linux/native/libmongocrypt.so
+/Users/camerongrondines/Desktop/Portfolio/MoviesDatabase/Movies.Catalog/src/Movies.Catalog.Service/bin/Debug/net5.0/runtimes/osx/native/libmongocrypt.dylib
+/Users/camerongrondines/Desktop/Portfolio/MoviesDatabase/Movies.Catalog/src/Movies.Catalog.Service/bin/Debug/net5.0/runtimes/win/native/mongocrypt.dll

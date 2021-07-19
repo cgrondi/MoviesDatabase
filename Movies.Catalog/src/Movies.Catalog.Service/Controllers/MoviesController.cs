@@ -1,8 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Movies.Catalog.Service.Dtos;
+using Movies.Catalog.Service.Entities;
+using Movies.Catalog.Service.Repositories;
 
 namespace Movies.Catalog.Service.Controllers
 {
@@ -10,89 +13,104 @@ namespace Movies.Catalog.Service.Controllers
     [Route("movies")] //https:localhost:5001/movies
     public class MoviesController : ControllerBase
     {
-        //temporary list instead of database
-        private static readonly List<MovieDto> movies = new()
+        private readonly IMoviesRepository moviesRepository;
+
+        public MoviesController(IMoviesRepository moviesRepository)
         {
-            new MovieDto(Guid.NewGuid(), "Avengers", new List<string>() { "Action" }, "Superheroes team up to save the day.", DateTimeOffset.UtcNow),
-            new MovieDto(Guid.NewGuid(), "The Mighty Ducks", new List<string>() { "Sports", "Comedy" }, "Lawyer has to teach kids hockey after getting a DUI.", DateTimeOffset.UtcNow),
-            new MovieDto(Guid.NewGuid(), "Sherlock Holmes", new List<string>() { "Drama", "Thriller", "Comedy", "Mystery" }, "Super detective solves crime mystery.", DateTimeOffset.UtcNow),
-            new MovieDto(Guid.NewGuid(), "The Dark Knight", new List<string>() { "Action" }, "Batman saves the day.", DateTimeOffset.UtcNow),
-            new MovieDto(Guid.NewGuid(), "Whacky Movie", new List<string>() { "Comedy" }, "Comedy movie made for testing.", DateTimeOffset.UtcNow)
-        };
+            this.moviesRepository = moviesRepository;
+        }
 
         [HttpGet]
-        public IEnumerable<MovieDto> Get()
+        public async Task<IEnumerable<MovieDto>> GetAsync()
         {
+            var movies = (await moviesRepository.GetAllAsync())
+                        .Select(movie => movie.AsDto());
             return movies;
         }
 
         [HttpGet("{id}")]  // GET /movies/{id}
-        public ActionResult<MovieDto> GetById(Guid id)
+        public async Task<ActionResult<MovieDto>> GetByIdAsync(Guid id)
         {
-            var item = movies.Where(item => item.Id == id).SingleOrDefault();
+            var item = await moviesRepository.GetAsync(id);
 
             if (item == null)
             {
                 return NotFound();
             }
 
-            return item;
+            return item.AsDto();
         }
 
         [HttpGet("/genre={genre}")]  // GET /movies/{genre}
-        public ActionResult<IEnumerable<MovieDto>> GetByGenre(string genre)
+        public async Task<ActionResult<IAsyncEnumerable<MovieDto>>> GetByGenreAsync(string genre)
         {
-            var items = movies.Where(item => item.Genres.Contains(genre, StringComparer.OrdinalIgnoreCase));
+            var movies = (await moviesRepository.GetAsync(genre))
+                        .Select(movie => movie.AsDto());
 
-            if (!items.Any())
+            if (!movies.Any())
             {
                 return NotFound();
             }
-            return items.ToList();
+
+            return Ok(movies);
         }
 
         [HttpPost] //POST /movies
-        public ActionResult<MovieDto> Post(CreateMovieDto createMovieDto)
+        public async Task<ActionResult<MovieDto>> PostAsync(CreateMovieDto createMovieDto)
         {
-            var item = new MovieDto(Guid.NewGuid(), createMovieDto.Title, createMovieDto.Genres, createMovieDto.Description, DateTimeOffset.UtcNow);
-            movies.Add(item);
-            return CreatedAtAction(nameof(GetById), new { id = item.Id }, item);
+            //take createMovieDto.Genres and capitalize each string
+            List<string> capitalizedGenres = createMovieDto.Genres.ConvertAll(d => char.ToUpper(d[0]) + d.Substring(1));
+            var movie = new Movie
+            {
+                Title = createMovieDto.Title,
+                Genres = capitalizedGenres,
+                Description = createMovieDto.Description,
+                NumberOwned = createMovieDto.NumberOwned,
+                NumberAvailableToRent = createMovieDto.NumberAvailableToRent,
+                CreatedDate = DateTimeOffset.UtcNow
+            };
+
+            await moviesRepository.CreateAsync(movie);
+
+
+            return CreatedAtAction(nameof(GetByIdAsync), new { id = movie.Id }, movie);
         }
 
         [HttpPut("{id}")]  //PUT /movies/{id}
-        public IActionResult Put(Guid id, UpdateMovieDto updateMovieDto)
+        public async Task<IActionResult> PutAsync(Guid id, UpdateMovieDto updateMovieDto)
         {
-            var exhistingItem = movies.Where(item => item.Id == id).SingleOrDefault();
+            var exhistingMovie = await moviesRepository.GetAsync(id);
 
-            if (exhistingItem == null)
+            if (exhistingMovie == null)
             {
                 return NotFound();
             }
 
-            var updatedItem = exhistingItem with
-            {
-                Title = updateMovieDto.Title,
-                Genres = updateMovieDto.Genres,
-                Description = updateMovieDto.Description
-            };
+            List<string> capitalizedGenres = updateMovieDto.Genres.ConvertAll(d => char.ToUpper(d[0]) + d.Substring(1));
 
-            var index = movies.FindIndex(exhistingItem => exhistingItem.Id == id);
-            movies[index] = updatedItem;
+            exhistingMovie.Title = updateMovieDto.Title;
+            exhistingMovie.Genres = capitalizedGenres;
+            exhistingMovie.Description = updateMovieDto.Description;
+            exhistingMovie.NumberOwned = updateMovieDto.NumberOwned;
+            exhistingMovie.NumberAvailableToRent = updateMovieDto.NumberAvailableToRent;
+
+            await moviesRepository.UpdateAsync(exhistingMovie);
 
             return NoContent();
         }
 
         [HttpDelete("{id}")] //DELETE /movies/{id}
-        public IActionResult Delete(Guid id)
+        public async Task<IActionResult> DeleteAsync(Guid id)
         {
-            var index = movies.FindIndex(exhistingItem => exhistingItem.Id == id);
+            var movie = await moviesRepository.GetAsync(id);
 
-            if (index < 0)
+            if (movie == null)
             {
                 return NotFound();
             }
 
-            movies.RemoveAt(index);
+            await moviesRepository.RemoveAsync(movie.Id);
+
             return NoContent();
         }
     }

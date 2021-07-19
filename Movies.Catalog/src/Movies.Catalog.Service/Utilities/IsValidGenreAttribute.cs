@@ -33,6 +33,7 @@ namespace Movies.Catalog.Service.Utilities
             foreach (var genre in value as IEnumerable<string>)
             {
                 if (!matchList.Contains(genre, StringComparer.OrdinalIgnoreCase))
+                // if (!matchList.Contains(genre))
                 {
                     return new ValidationResult(GetErrorMessage());
                 }

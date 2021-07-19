@@ -11,11 +11,18 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using MongoDB.Bson;
+using MongoDB.Bson.Serialization;
+using MongoDB.Bson.Serialization.Serializers;
+using MongoDB.Driver;
+using Movies.Catalog.Service.Repositories;
+using Movies.Catalog.Service.Settings;
 
 namespace Movies.Catalog.Service
 {
     public class Startup
     {
+        private ServiceSettings serviceSettings;
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -27,7 +34,24 @@ namespace Movies.Catalog.Service
         public void ConfigureServices(IServiceCollection services)
         {
 
-            services.AddControllers();
+            BsonSerializer.RegisterSerializer(new GuidSerializer(BsonType.String));
+            BsonSerializer.RegisterSerializer(new DateTimeOffsetSerializer(BsonType.String));
+
+            serviceSettings = Configuration.GetSection(nameof(ServiceSettings)).Get<ServiceSettings>();
+
+            services.AddSingleton(ServiceProvider =>
+            {
+                var mongoDbSettings = Configuration.GetSection(nameof(MongoDbSettings)).Get<MongoDbSettings>();
+                var mongoClient = new MongoClient(mongoDbSettings.ConnectionString);
+                return mongoClient.GetDatabase(serviceSettings.ServiceName);  //Possibly need serviceSettings.ServiceName to be "MovieCatalog" not "Catalog"
+            });
+
+            services.AddSingleton<IMoviesRepository, MoviesRepository>();
+
+            services.AddControllers(options =>
+            {
+                options.SuppressAsyncSuffixInActionNames = false;
+            });
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Movies.Catalog.Service", Version = "v1" });
